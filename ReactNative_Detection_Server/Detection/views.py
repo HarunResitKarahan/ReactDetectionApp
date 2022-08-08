@@ -51,4 +51,5 @@ def mesh(request):
         while flag.lastcommitted != int(request.data['meshid']):
             pass    
         flag.lastcommitted = None
+        flag.waitingMeshs.remove(request.data['meshid'])
         return JsonResponse("Dondu", safe=False)
