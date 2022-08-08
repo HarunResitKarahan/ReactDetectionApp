@@ -21,8 +21,8 @@ def Detection(request):
         print(request.POST['clickedproject']) # Fotğrafın çekildiği proje
         img = cv2.imdecode(numpy.fromstring(request.FILES["photo"].read(), numpy.uint8), cv2.IMREAD_UNCHANGED)
         # img = cv2.resize(img, (720,576))
-        img = cv2.putText(img, "SERVERDAN GELEN ", (0, 570), cv2.FONT_HERSHEY_SIMPLEX, 5, (0, 255, 0), 20) 
-        img = cv2.putText(img, "GORUNTU", (0, 700), cv2.FONT_HERSHEY_SIMPLEX, 5, (0, 255, 0), 20) 
+        # img = cv2.putText(img, "SERVERDAN GELEN ", (0, 570), cv2.FONT_HERSHEY_SIMPLEX, 5, (0, 255, 0), 20) 
+        # img = cv2.putText(img, "GORUNTU", (0, 700), cv2.FONT_HERSHEY_SIMPLEX, 5, (0, 255, 0), 20) 
         img = detect.object_detection(img)
         # # body = json.loads(body_unicode)
         # # content = body['content']
