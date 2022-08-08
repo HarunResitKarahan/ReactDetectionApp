@@ -28,6 +28,7 @@ export default function App() {
   const [startOver, setStartOver] = useState(true)
   const [type, setType] = useState(Camera.Constants.Type.back)
   const [items, setItems] = useState<any>(['SafetyZone','PumaFlex','Kapak Sol','Sarı Kablo','Item'])
+  const [buttonitems, setButtonitems] = useState<any>([])
   const [buttontype, setButtontype] = useState<any>([true,false,false,true,true])
   const [camera, setCamera] = useState(null);
   const serverUrl = "192.168.1.21:8000"
@@ -35,7 +36,7 @@ export default function App() {
     ;(async () => {
       const {status} = await Camera.requestCameraPermissionsAsync()
       setHasPermission(status === 'granted')
-      // setInterval(fetch_get, 1000);
+      setInterval(fetch_get, 1000);
     })()
   }, [])
   const prepareRatio = async () => {
@@ -80,12 +81,13 @@ export default function App() {
     }
   };
   const fetch_get = async() => {
-    await fetch ("http://"+ serverUrl +"/deneme", {
+    await fetch ("http://"+ serverUrl +"/waitingmeshs", {
       method: 'GET',
     })
     .then(response => response.json())
     .then(data  => {
-      // console.log(data)
+      setButtonitems(data)
+      // console.log(buttonitems)
     })
   };
   const setCameraReady = async() => {
@@ -167,13 +169,13 @@ export default function App() {
               height: 200,
             }}>
               <TouchableOpacity
-                disabled={!buttontype[index]}
+                disabled={!buttonitems.includes(index)}
                 onPress={() => {
                   setStartOver(false)
                   setClickedProject(index)
                 }}
                 // style={[styles.text, touched && invalid ? styles.textinvalid : styles.textvalid]}
-                style={[buttontype[index] ? styles.buttonactive : styles.buttondeactive]}
+                style={[buttonitems.includes(index) ? styles.buttonactive : styles.buttondeactive]}
               >
                 <Text
                   style={{

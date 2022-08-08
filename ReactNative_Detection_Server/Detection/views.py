@@ -8,7 +8,9 @@ import base64
 
 from rest_framework.decorators import api_view
 from . import Object_Detector
+from . import flag
 detect = Object_Detector.ObjectDetection()
+flag = flag.Flag()
 
 # Create your views here.
 @api_view(['GET', 'POST'])
@@ -19,6 +21,7 @@ def Detection(request):
         data = {'result': [], 'image': []}
         print(request.data)
         print(request.POST['clickedproject']) # Fotğrafın çekildiği proje
+        flag.lastcommitted = int(request.POST['clickedproject'])
         img = cv2.imdecode(numpy.fromstring(request.FILES["photo"].read(), numpy.uint8), cv2.IMREAD_UNCHANGED)
         # img = cv2.resize(img, (720,576))
         # img = cv2.putText(img, "SERVERDAN GELEN ", (0, 570), cv2.FONT_HERSHEY_SIMPLEX, 5, (0, 255, 0), 20) 
@@ -35,8 +38,16 @@ def Detection(request):
         # print(data)
         # print(type(body_unicode))
         return JsonResponse(data, safe=False)
+@api_view(['GET', 'POST'])
+def WaitingMeshs(request):
+    if request.method == 'GET':
+        return JsonResponse(flag.waitingMeshs, safe=False)
 
 @api_view(['GET', 'POST'])
-def deneme(request):
-    if request.method == 'GET':
+def mesh(request):
+    if request.method == 'POST':
+        data = request.data['meshid']
+        flag.waitingMeshs.append(data)
+        while flag.lastcommitted != int(request.data['meshid']):
+            pass    
         return JsonResponse("Dondu", safe=False)

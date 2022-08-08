@@ -3,5 +3,6 @@ from . import views
 
 urlpatterns = [
     path('', views.Detection),
-    path('deneme', views.deneme),
+    path('mesh', views.mesh),
+    path('waitingmeshs', views.WaitingMeshs)
 ]
