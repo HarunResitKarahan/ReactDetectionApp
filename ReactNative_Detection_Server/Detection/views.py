@@ -50,4 +50,5 @@ def mesh(request):
         flag.waitingMeshs.append(data)
         while flag.lastcommitted != int(request.data['meshid']):
             pass    
+        flag.lastcommitted = None
         return JsonResponse("Dondu", safe=False)
