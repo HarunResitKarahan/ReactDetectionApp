@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from rest_framework.parsers import JSONParser
 from django.http.response import JsonResponse
 import json, cv2, numpy
+from datetime import datetime
 import base64
 
 from rest_framework.decorators import api_view
@@ -13,6 +14,7 @@ detect = Object_Detector.ObjectDetection()
 @api_view(['GET', 'POST'])
 def Detection(request):
     if request.method == 'POST':
+        print(datetime.now())
         # print(request.FILES["photo"])
         data = {'result': [], 'image': []}
         print(request.data)

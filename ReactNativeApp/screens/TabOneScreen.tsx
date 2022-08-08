@@ -12,11 +12,11 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Spinner from 'react-native-loading-spinner-overlay';
 const tag = '[CAMERA]'
 export default function App() {
+  const [capturedImage, setCapturedImage] = useState<any>(null)
   const [hasPermission, setHasPermission] = useState<any>(null)
   const [previewVisible, setPreviewVisible] = useState(false)
   const [isdetectedImage, setIsDetectedImage] = useState(false)
   const [detectedImage, setDetectedImage] = useState<any>(null)
-  const [capturedImage, setCapturedImage] = useState<any>(null)
   const [clickedproject, setClickedProject] = useState<any>(null)
   const [detectionResult, setDetectionResult] = useState<any>(null)
   const [imagePadding, setImagePadding] = useState(0);
@@ -35,7 +35,7 @@ export default function App() {
     ;(async () => {
       const {status} = await Camera.requestCameraPermissionsAsync()
       setHasPermission(status === 'granted')
-      setInterval(fetch_get, 1000);
+      // setInterval(fetch_get, 1000);
     })()
   }, [])
   const prepareRatio = async () => {
@@ -101,9 +101,11 @@ export default function App() {
     setPreviewVisible(false)
     setStartOver(true)
   }
+  // const __takePicture = async () => {
+  //   __sendToControl()
+  // }
   const __sendToControl = async () => {
     if (!camera) return
-    // console.log(ratio)
     const photo = await camera.takePictureAsync({
       // fixOrientation: false,
       quality: 1,
@@ -111,8 +113,9 @@ export default function App() {
     })
     setCapturedImage(photo)
     setPreviewVisible(true)
+    setLoading(true)
     const localUri = photo.uri;
-    setLoading(true);
+    // setLoading(true);
     const filename = localUri.split('/').pop();
     const match = /\.(\w+)$/.exec(filename);
     const type = match ? `image/${match[1]}` : `image`;
@@ -139,13 +142,13 @@ export default function App() {
     })
     setLoading(false)
   }
-  if (loading) {
-    return (
-      <View style={styles.container}>
-        <ActivityIndicator size="large" loading={loading} />
-      </View>
-    )
-  }
+  // if (loading) {
+  //   return (
+  //     <View style={styles.container}>
+  //       <ActivityIndicator size="large" loading={loading} />
+  //     </View>
+  //   )
+  // }
   return (
     <View style={{flex: 1}}>
       {startOver ? (
@@ -199,14 +202,6 @@ export default function App() {
                 flex: 1
               }}
             >
-              <Spinner
-                //visibility of Overlay Loading Spinner
-                visible={loading}
-                //Text with the Spinner
-                textContent={'Lütfen Bekleyin...'}
-                //Text style of the Spinner Text
-                textStyle={{color: '#FFF'}}
-              />
               <View
                 style={{
                   flex: 1,
@@ -221,7 +216,16 @@ export default function App() {
                     // backgroundColor: 'black',
                   }}
                 >
+                  <Spinner
+                    //visibility of Overlay Loading Spinner
+                    visible={loading}
+                    //Text with the Spinner
+                    textContent={'Lütfen Bekleyin...'}
+                    //Text style of the Spinner Text
+                    textStyle={{color: '#FFF'}}
+                  />
                 </View>
+                
               </View>
             </ImageBackground>
           ) : null}
@@ -293,7 +297,10 @@ export default function App() {
                       }}
                     >
                       <TouchableOpacity
-                        onPress={__sendToControl}
+                        onPress={
+                            __sendToControl
+                            // __sendToControl
+                        }
                         style={{
                           width: 70,
                           height: 70,
